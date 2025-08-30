@@ -43,6 +43,7 @@ namespace Metodologias_2025
         {
             return this.dni > ((Persona)comparable).dni;
         }
+      
 
     }
 }
