@@ -11,13 +11,23 @@ namespace Metodologias_2025
     {
         public int legajo;
         public decimal promedio;
+        private IEstrategia estrategia = new ComparacionPorPromedio();
 
-        public Alumno(string n, int d, int l, decimal p) : base(n, d)
+        public Alumno(string n, int d, int l, decimal p, IEstrategia comp = null) : base(n, d)
         {
             legajo = l;
             promedio = p;
+            estrategia = comp ?? new ComparacionPorPromedio();
         }
 
+        public void setEstrategia(IEstrategia nueva)
+        {
+            estrategia = nueva;
+        }
+        public IEstrategia getEstrategia()
+        {
+            return estrategia;
+        }
         public int getLegajo()
         {
             return legajo;
@@ -34,18 +44,18 @@ namespace Metodologias_2025
 
         public override bool sosIgual(IComparable comparable)
         {
-            return this.promedio == ((Alumno)comparable).promedio;
+            return estrategia.sosIgual(this, comparable);
         }
-
         public override bool sosMenor(IComparable comparable)
         {
-            return this.promedio < ((Alumno)comparable).promedio;
+           return estrategia.sosMenor(this, comparable);
         }
 
         public override bool sosMayor(IComparable comparable)
         {
-            return this.promedio > ((Alumno)comparable).promedio;
+            return estrategia.sosMayor(this, comparable);
         }
-
+        
     }
 }
+

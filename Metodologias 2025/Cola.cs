@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Metodologias_2025
 {
-    public class Cola : IColeccionable
+    public class Cola : IColeccionable , IIterable
     {
         List<IComparable> elementos;
         public Cola() { this.elementos = new List<IComparable>(); }
@@ -61,6 +61,11 @@ namespace Metodologias_2025
                 }
             }
             return false;
+        }
+
+        public IIterator CrearIterador()
+        {
+            return new IteradorLista(elementos);
         }
     }
 }
