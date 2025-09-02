@@ -31,7 +31,7 @@ namespace Metodologias_2025
 
         public override string ToString()
         {
-            return $"Numero: {valor}";
+            return this.valor.ToString();
         }
 
 

@@ -13,15 +13,11 @@ namespace Metodologias_2025
             Pila pila = new Pila();
             Cola cola = new Cola();
             ColeccionMultiple multiple = new ColeccionMultiple(pila, cola);
-
-            // Funciones.Llenar(pila);
-            // Funciones.Llenar(cola);
-            //Funciones.LlenarAlumnos(cola);
-            // Funciones.LlenarAlumnos(pila);
-
-            //IColeccionable alumnos = new Pila();  
-            //Funciones.LlenarAlumnos(alumnos);
-            // Funciones.Informar(alumnos);
+            
+           Funciones.Llenar(pila);
+            Funciones.Llenar(cola);
+            Funciones.LlenarAlumnos(cola);
+            Funciones.LlenarAlumnos(pila);
 
             // Console.WriteLine("Informando Pila");
             // Funciones.Informar(pila);
@@ -29,17 +25,10 @@ namespace Metodologias_2025
             // Console.WriteLine("Informando Cola");
             // Funciones.Informar(cola);
 
-            // Console.WriteLine("Informando Multiple");
-            // Funciones.Informar(multiple);
-          
-
-            Funciones.LlenarAlumnos(pila);
-            Funciones.LlenarAlumnos(cola);
-
+            Console.WriteLine("Informando Multiple");
             Funciones.Informar(multiple);
 
-            Console.ReadKey();
-
+            
             Console.ReadKey();
         }
     }
