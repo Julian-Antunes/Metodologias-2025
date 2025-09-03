@@ -24,83 +24,67 @@ namespace Metodologias_2025
         {
             Console.WriteLine($"Cantidad de elementos: {coleccion.cuantos()}");
 
-            Numero minimo = (Numero)coleccion.minimo();
-            Numero maximo = (Numero)coleccion.maximo();
+            var min = coleccion.minimo();
+            var max = coleccion.maximo();
 
-            Console.WriteLine($"Minimo: {minimo.getValor()}");
-            Console.WriteLine($"Maximo: {maximo.getValor()}");
+            Console.WriteLine($"Mínimo: {min}");
+            Console.WriteLine($"Máximo: {max}");
 
-            //Console.Write("Ingrese un valor para buscar: ");
-           //string entrada = Console.ReadLine();
+            IComparable buscado;
 
-            Numero buscado = new Numero(valor);
-
-            if (coleccion.minimo() is Numero)
+            if (min is Numero)
             {
-                string entrada = Console.ReadLine();
-                int valor = int.Parse(entrada);
-                buscado = new Numero(valor);
+                Console.Write("Ingrese un número a buscar: ");
+                var entrada = Console.ReadLine()?.Trim();
+                if (!int.TryParse(entrada, out int n)) { Console.WriteLine("Número inválido."); return; }
+                buscado = new Numero(n);
             }
-            else if (coleccion.minimo() is Alumno)
+            else if (min is Alumno)
             {
-                Alumno alumnoActual = (Alumno)coleccion.minimo();
-                Alumno buscadoAlumno = new Alumno("X", 0, 0, 0);
-                buscadoAlumno.setEstrategia(alumnoActual.getEstrategia());
+                var alumnoActual = (Alumno)min;
+                var estrategia = alumnoActual.getEstrategia();
+                Console.WriteLine($"(Comparando por {estrategia.GetType().Name.Replace("ComparacionPor", "")})");
 
-                if (alumnoActual.getEstrategia() is ComparacionPorNombre)
+                if (estrategia is ComparacionPorNombre)
                 {
                     Console.Write("Ingrese NOMBRE a buscar: ");
-                    string nombre = Console.ReadLine().Trim();
-
-                    buscadoAlumno = new Alumno(nombre, 0, 0, 0, alumnoActual.getEstrategia());
+                    string nombre = Console.ReadLine()?.Trim();
+                    buscado = new Alumno(nombre, 0, 0, 0, estrategia);
                 }
-                else if (alumnoActual.getEstrategia() is ComparacionPorDNI)
+                else if (estrategia is ComparacionPorDNI)
                 {
                     Console.Write("Ingrese DNI a buscar: ");
-                    string leerDNI = Console.ReadLine().Trim();
-
-                    if (!int.TryParse(leerDNI, out int dni))
-                    {
-                        Console.WriteLine("DNI inválido, debe ser un numero.");
-                        return;
-                    }
-
-                    buscadoAlumno = new Alumno("X", dni, 0, 0, alumnoActual.getEstrategia());
+                    var entrada = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(entrada, out int dni)) { Console.WriteLine("DNI inválido (solo números)."); return; }
+                    buscado = new Alumno("X", dni, 0, 0, estrategia);
                 }
-                else if (alumnoActual.getEstrategia() is ComparacionPorLegajo)
+                else if (estrategia is ComparacionPorLegajo)
                 {
                     Console.Write("Ingrese LEGAJO a buscar: ");
-                    string leerLegajo = Console.ReadLine().Trim();
-
-                    if (!int.TryParse(leerLegajo, out int legajo))
-                    {
-                        Console.WriteLine("Legajo inválido, debe ser un numero.");
-                        return;
-                    }
-
-                    buscadoAlumno = new Alumno("X", 0, legajo, 0, alumnoActual.getEstrategia());
+                    var entrada = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(entrada, out int legajo)) { Console.WriteLine("Legajo inválido (solo números)."); return; }
+                    buscado = new Alumno("X", 0, legajo, 0, estrategia);
                 }
-                else if (alumnoActual.getEstrategia() is ComparacionPorPromedio)
+                else // Promedio
                 {
-                    Console.Write("Ingrese PROMEDIO a buscar: ");
-                    string leerPromedio = Console.ReadLine().Trim();
-
-                    if (!decimal.TryParse(leerPromedio, out decimal promedio))
-                    {
-                        Console.WriteLine("Promedio invalido, debe ser un numero EJEMPLO 7,50");
-                        return;
-                    }
-
-                    buscadoAlumno = new Alumno("X", 0, 0, promedio, alumnoActual.getEstrategia());
+                    Console.Write("Ingrese PROMEDIO a buscar (ej: 7,50): ");
+                    var entrada = Console.ReadLine()?.Trim()?.Replace(',', '.');
+                    if (!decimal.TryParse(entrada, System.Globalization.NumberStyles.Number,
+                                          System.Globalization.CultureInfo.InvariantCulture, out decimal prom))
+                    { Console.WriteLine("Promedio inválido."); return; }
+                    buscado = new Alumno("X", 0, 0, prom, estrategia);
                 }
-
-                buscado = buscadoAlumno;
-
             }
             else
-                Console.WriteLine("El elemento esta en la coleccion.");
-        }
+            {
+                Console.WriteLine("Tipo no soportado.");
+                return;
+            }
 
+            Console.WriteLine(coleccion.contiene(buscado)
+                ? "El elemento está en la colección."
+                : "El elemento NO está en la colección.");
+        }
 
         public static void LlenarAlumnos(IColeccionable coleccion, IEstrategia estrategia = null)
         {
